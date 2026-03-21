@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 // 管理者のメールアドレスをここに設定
-const ADMIN_EMAILS = [
-  "kazuhiro.oda@unalogy.com"
-];
+const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || "")
+  .split(",")
+  .filter(Boolean);
 
 interface MemberProfile {
   id: string;
