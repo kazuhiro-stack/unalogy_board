@@ -348,7 +348,7 @@ export default function ProfileEditPage() {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="尾田 和啓"
+              placeholder="例：山田 太郎"
               className={inputClass}
             />
           </div>
@@ -362,7 +362,7 @@ export default function ProfileEditPage() {
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="UNALOGY代表 / AI×営業コンサルタント"
+              placeholder="例：Webデザイナー / マーケティングコンサル"
               className={inputClass}
             />
           </div>
@@ -374,7 +374,7 @@ export default function ProfileEditPage() {
               type="text"
               value={tagline}
               onChange={(e) => setTagline(e.target.value)}
-              placeholder="売れる仕組みを、AIで加速させる"
+              placeholder="例：デザインの力でビジネスを加速させる"
               className={inputClass}
             />
             <p className={hintClass}>
@@ -413,7 +413,7 @@ export default function ProfileEditPage() {
               type="text"
               value={skillsText}
               onChange={(e) => setSkillsText(e.target.value)}
-              placeholder="法人営業、IS構築、AI活用支援、M&A支援、財務DD"
+              placeholder="例：Webデザイン、マーケティング、SNS運用、ライティング"
               className={inputClass}
             />
             <p className={hintClass}>
@@ -441,7 +441,7 @@ export default function ProfileEditPage() {
               type="text"
               value={achievementsText}
               onChange={(e) => setAchievementsText(e.target.value)}
-              placeholder="IS部門ゼロ→構築 アポ率10%達成、M&A年間10件+のDD実績、堂島取引所 最年少課長"
+              placeholder="例：LP制作100件+、SNSフォロワー5万人、年商1億円達成支援"
               className={inputClass}
             />
             <p className={hintClass}>
