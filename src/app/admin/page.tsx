@@ -6,8 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 
 // 管理者のメールアドレスをここに設定
 const ADMIN_EMAILS = [
-  // 自分のGoogleアカウントのメールアドレスを追加してください
-  // 例: "kazu@example.com"
+  "kazuhiro.oda@unalogy.com"
 ];
 
 interface MemberProfile {
