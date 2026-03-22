@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { Header } from "@/components/Header";
 import type { ProfileWithSkills, SkillCategory } from "@/lib/types";
 
 interface Props {
@@ -26,7 +27,7 @@ export function TalentGrid({ profiles, categories, currentUserId }: Props) {
 
   const toggleSkill = (skill: string) => {
     setSelectedSkills((prev) =>
-      prev.includes(skill) ? prev.filter((s) => s !== skill) : [...prev, skill],
+      prev.includes(skill) ? prev.filter((s) => s !== skill) : [...prev, skill]
     );
   };
 
@@ -41,7 +42,9 @@ export function TalentGrid({ profiles, categories, currentUserId }: Props) {
       return false;
     if (
       selectedSkills.length > 0 &&
-      !selectedSkills.some((s) => p.skills.some((ps) => ps.skill_name === s))
+      !selectedSkills.some((s) =>
+        p.skills.some((ps) => ps.skill_name === s)
+      )
     )
       return false;
     return true;
@@ -101,125 +104,9 @@ export function TalentGrid({ profiles, categories, currentUserId }: Props) {
     }
   }
 
-  async function handleLogout() {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.refresh();
-  }
-
   return (
     <div className="min-h-screen bg-[#FAFBFC]">
-      {/* ===== Header ===== */}
-      <header className="sticky top-0 z-[100] bg-white/80 backdrop-blur-xl border-b border-gray-100">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="white"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
-                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-              </svg>
-            </div>
-            <span className="text-lg font-bold text-gray-900 tracking-tight hidden sm:block">
-              TalentBoard
-            </span>
-          </div>
-
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-1">
-            <a
-              href="/"
-              className="px-3 py-2 text-sm font-medium text-teal-600 bg-teal-50 rounded-lg"
-            >
-              メンバー一覧
-            </a>
-            {currentUserId && (
-              <>
-                <a
-                  href="/profile/edit"
-                  className="px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-50 rounded-lg transition-colors"
-                >
-                  プロフィール編集
-                </a>
-                <a
-                  href="/dashboard"
-                  className="px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-50 rounded-lg transition-colors"
-                >
-                  興味あり一覧
-                </a>
-              </>
-            )}
-          </nav>
-
-          {/* Auth buttons */}
-          <div className="flex items-center gap-1">
-            {currentUserId ? (
-              <>
-                <a
-                  href="/dashboard"
-                  className="md:hidden p-2 text-gray-400 hover:text-pink-500 transition-colors"
-                  title="興味あり一覧"
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                  </svg>
-                </a>
-                <a
-                  href="/profile/edit"
-                  className="md:hidden p-2 text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                  </svg>
-                </a>
-                <button
-                  onClick={handleLogout}
-                  className="text-sm text-gray-400 hover:text-gray-600 transition-colors px-3 py-1.5"
-                >
-                  ログアウト
-                </button>
-              </>
-            ) : (
-              <a
-                href="/login"
-                className="text-sm font-semibold text-white bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 px-5 py-2 rounded-full transition-all shadow-sm hover:shadow-md"
-              >
-                ログイン
-              </a>
-            )}
-          </div>
-        </div>
-      </header>
+      <Header currentUserId={currentUserId} />
 
       {/* ===== Hero ===== */}
       <div className="relative overflow-hidden bg-white border-b border-gray-100">
@@ -243,19 +130,12 @@ export function TalentGrid({ profiles, categories, currentUserId }: Props) {
           <div className="flex gap-8 sm:gap-12 mt-8">
             {[
               { num: profiles.length, label: "メンバー" },
-              {
-                num: profiles.filter((p) => p.is_available).length,
-                label: "受付中",
-              },
+              { num: profiles.filter((p) => p.is_available).length, label: "受付中" },
               { num: allSkills.length, label: "スキル領域" },
             ].map((s) => (
               <div key={s.label}>
-                <div className="text-2xl sm:text-3xl font-extrabold text-gray-900">
-                  {s.num}
-                </div>
-                <div className="text-xs text-gray-400 font-medium mt-0.5">
-                  {s.label}
-                </div>
+                <div className="text-2xl sm:text-3xl font-extrabold text-gray-900">{s.num}</div>
+                <div className="text-xs text-gray-400 font-medium mt-0.5">{s.label}</div>
               </div>
             ))}
           </div>
@@ -267,19 +147,8 @@ export function TalentGrid({ profiles, categories, currentUserId }: Props) {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3">
           <div className="flex gap-2 sm:gap-3 mb-3 flex-wrap items-center">
             <div className="relative flex-1 min-w-[180px]">
-              <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <circle cx="11" cy="11" r="8" />
-                <path d="m21 21-4.3-4.3" />
+              <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" />
               </svg>
               <input
                 type="text"
@@ -297,9 +166,7 @@ export function TalentGrid({ profiles, categories, currentUserId }: Props) {
                   : "border-gray-200 bg-gray-50 text-gray-400 hover:bg-gray-100"
               }`}
             >
-              <span
-                className={`inline-block w-1.5 h-1.5 rounded-full mr-1.5 ${showOnlyAvailable ? "bg-emerald-500" : "bg-gray-300"}`}
-              />
+              <span className={`inline-block w-1.5 h-1.5 rounded-full mr-1.5 ${showOnlyAvailable ? "bg-emerald-500" : "bg-gray-300"}`} />
               受付中のみ
             </button>
           </div>
@@ -337,26 +204,11 @@ export function TalentGrid({ profiles, categories, currentUserId }: Props) {
 
         {filtered.length === 0 ? (
           <div className="text-center py-20 text-gray-300">
-            <svg
-              className="mx-auto mb-4"
-              width="48"
-              height="48"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.3-4.3" />
+            <svg className="mx-auto mb-4" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" />
             </svg>
-            <p className="font-semibold text-gray-400">
-              条件に一致するメンバーが見つかりません
-            </p>
-            <p className="text-sm mt-1 text-gray-300">
-              フィルターを変更してみてください
-            </p>
+            <p className="font-semibold text-gray-400">条件に一致するメンバーが見つかりません</p>
+            <p className="text-sm mt-1 text-gray-300">フィルターを変更してみてください</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
@@ -384,19 +236,13 @@ export function TalentGrid({ profiles, categories, currentUserId }: Props) {
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                       </span>
-                      <span className="text-[11px] font-bold text-emerald-700">
-                        受付中
-                      </span>
+                      <span className="text-[11px] font-bold text-emerald-700">受付中</span>
                     </div>
                   )}
                   <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-black/40 to-transparent" />
                   <div className="absolute bottom-3 left-4 right-4">
-                    <div className="text-lg font-bold text-white drop-shadow-sm">
-                      {profile.name}
-                    </div>
-                    <div className="text-xs text-white/85 font-medium">
-                      {profile.title}
-                    </div>
+                    <div className="text-lg font-bold text-white drop-shadow-sm">{profile.name}</div>
+                    <div className="text-xs text-white/85 font-medium">{profile.title}</div>
                   </div>
                 </div>
 
@@ -409,10 +255,7 @@ export function TalentGrid({ profiles, categories, currentUserId }: Props) {
                       .sort((a, b) => a.display_order - b.display_order)
                       .slice(0, 4)
                       .map((s) => (
-                        <span
-                          key={s.id}
-                          className="px-2 py-0.5 bg-teal-50 text-teal-600 text-[11px] font-semibold rounded-md"
-                        >
+                        <span key={s.id} className="px-2 py-0.5 bg-teal-50 text-teal-600 text-[11px] font-semibold rounded-md">
                           {s.skill_name}
                         </span>
                       ))}
@@ -423,9 +266,7 @@ export function TalentGrid({ profiles, categories, currentUserId }: Props) {
                     )}
                   </div>
                   {/* SNS links on card */}
-                  {Object.entries(profile.sns_links || {}).filter(
-                    ([, v]) => v && String(v).trim() !== "",
-                  ).length > 0 && (
+                  {Object.entries(profile.sns_links || {}).filter(([, v]) => v && String(v).trim() !== "").length > 0 && (
                     <div className="flex flex-wrap gap-1.5 mt-2.5">
                       {Object.entries(profile.sns_links || {})
                         .filter(([, v]) => v && String(v).trim() !== "")
@@ -434,20 +275,13 @@ export function TalentGrid({ profiles, categories, currentUserId }: Props) {
                           const url = v.startsWith("http")
                             ? v
                             : key === "x"
-                              ? `https://x.com/${v.replace("@", "")}`
-                              : key === "github"
-                                ? `https://github.com/${v}`
-                                : key === "note"
-                                  ? `https://note.com/${v}`
-                                  : v;
-                          const label =
-                            key === "x"
-                              ? "X"
-                              : key === "note"
-                                ? "note"
-                                : key === "github"
-                                  ? "GitHub"
-                                  : "Web";
+                            ? `https://x.com/${v.replace("@", "")}`
+                            : key === "github"
+                            ? `https://github.com/${v}`
+                            : key === "note"
+                            ? `https://note.com/${v}`
+                            : v;
+                          const label = key === "x" ? "X" : key === "note" ? "note" : key === "github" ? "GitHub" : "Web";
                           return (
                             <a
                               key={key}
@@ -457,19 +291,9 @@ export function TalentGrid({ profiles, categories, currentUserId }: Props) {
                               onClick={(e) => e.stopPropagation()}
                               className="flex items-center gap-1 px-2 py-0.5 bg-gray-50 rounded-md text-[11px] text-gray-400 font-medium hover:text-teal-600 hover:bg-teal-50 transition-all"
                             >
-                              <svg
-                                width="10"
-                                height="10"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              >
+                              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                                <polyline points="15 3 21 3 21 9" />
-                                <line x1="10" y1="14" x2="21" y2="3" />
+                                <polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" />
                               </svg>
                               {label}
                             </a>
@@ -480,30 +304,16 @@ export function TalentGrid({ profiles, categories, currentUserId }: Props) {
                   <div className="mt-4 pt-3 border-t border-gray-50 flex justify-between items-center">
                     {/* Interest count */}
                     <span className="text-[11px] text-gray-300 font-medium truncate mr-2 flex items-center gap-1">
-                      {(profile.interest_count || 0) +
-                        (sentInterests.has(profile.id) ? 1 : 0) >
-                        0 && (
+                      {((profile.interest_count || 0) + (sentInterests.has(profile.id) ? 1 : 0)) > 0 && (
                         <span className="flex items-center gap-1 text-pink-400">
-                          <svg
-                            width="12"
-                            height="12"
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                            stroke="none"
-                          >
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                           </svg>
-                          {(profile.interest_count || 0) +
-                            (sentInterests.has(profile.id) ? 1 : 0)}
-                          件
+                          {(profile.interest_count || 0) + (sentInterests.has(profile.id) ? 1 : 0)}件
                         </span>
                       )}
-                      {(profile.interest_count || 0) +
-                        (sentInterests.has(profile.id) ? 1 : 0) ===
-                        0 && (
-                        <span>
-                          {(profile.achievements as string[])?.[0] || ""}
-                        </span>
+                      {((profile.interest_count || 0) + (sentInterests.has(profile.id) ? 1 : 0)) === 0 && (
+                        <span>{(profile.achievements as string[])?.[0] || ""}</span>
                       )}
                     </span>
                     <button
@@ -519,9 +329,7 @@ export function TalentGrid({ profiles, categories, currentUserId }: Props) {
                           : "bg-gray-50 text-gray-500 hover:bg-pink-50 hover:text-pink-500"
                       }`}
                     >
-                      {sentInterests.has(profile.id)
-                        ? "♥ 興味あり済"
-                        : "♡ 興味あり"}
+                      {sentInterests.has(profile.id) ? "♥ 興味あり済" : "♡ 興味あり"}
                     </button>
                   </div>
                 </div>
@@ -536,18 +344,8 @@ export function TalentGrid({ profiles, categories, currentUserId }: Props) {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 text-sm text-gray-400">
             <div className="w-5 h-5 rounded bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
-              <svg
-                width="10"
-                height="10"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="white"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" />
               </svg>
             </div>
             TalentBoard
@@ -585,36 +383,25 @@ export function TalentGrid({ profiles, categories, currentUserId }: Props) {
               <div className="absolute top-2 left-1/2 -translate-x-1/2 w-10 h-1 rounded-full bg-white/40 sm:hidden" />
               <div className="absolute bottom-5 left-5 right-5">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-2xl font-bold text-white drop-shadow-sm">
-                    {selectedProfile.name}
-                  </span>
+                  <span className="text-2xl font-bold text-white drop-shadow-sm">{selectedProfile.name}</span>
                   {selectedProfile.is_available && (
-                    <span className="bg-emerald-500 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full">
-                      受付中
-                    </span>
+                    <span className="bg-emerald-500 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full">受付中</span>
                   )}
                 </div>
-                <div className="text-sm text-white/80 font-medium mt-1">
-                  {selectedProfile.title}
-                </div>
+                <div className="text-sm text-white/80 font-medium mt-1">{selectedProfile.title}</div>
               </div>
             </div>
 
             <div className="p-5 sm:p-6">
               <div className="bg-gradient-to-r from-teal-50 to-emerald-50 rounded-xl p-4 border-l-[3px] border-teal-400 mb-5">
-                <p className="font-bold text-gray-800 text-base leading-relaxed">
-                  {selectedProfile.tagline}
-                </p>
+                <p className="font-bold text-gray-800 text-base leading-relaxed">{selectedProfile.tagline}</p>
               </div>
 
               <div className="flex flex-wrap gap-2 mb-6">
                 {selectedProfile.skills
                   .sort((a, b) => a.display_order - b.display_order)
                   .map((s) => (
-                    <span
-                      key={s.id}
-                      className="px-3 py-1 bg-teal-50 text-teal-700 text-sm font-semibold rounded-lg"
-                    >
+                    <span key={s.id} className="px-3 py-1 bg-teal-50 text-teal-700 text-sm font-semibold rounded-lg">
                       {s.skill_name}
                     </span>
                   ))}
@@ -622,37 +409,24 @@ export function TalentGrid({ profiles, categories, currentUserId }: Props) {
 
               {selectedProfile.bio && (
                 <div className="mb-5">
-                  <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-[2px] mb-2">
-                    経歴・強み
-                  </h3>
-                  <p className="text-sm text-gray-600 leading-[1.8]">
-                    {selectedProfile.bio}
-                  </p>
+                  <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-[2px] mb-2">経歴・強み</h3>
+                  <p className="text-sm text-gray-600 leading-[1.8]">{selectedProfile.bio}</p>
                 </div>
               )}
 
               {selectedProfile.looking_for && (
                 <div className="mb-5">
-                  <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-[2px] mb-2">
-                    こんな人と仕事したい
-                  </h3>
-                  <p className="text-sm text-gray-600 leading-[1.8]">
-                    {selectedProfile.looking_for}
-                  </p>
+                  <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-[2px] mb-2">こんな人と仕事したい</h3>
+                  <p className="text-sm text-gray-600 leading-[1.8]">{selectedProfile.looking_for}</p>
                 </div>
               )}
 
               {(selectedProfile.achievements as string[])?.length > 0 && (
                 <div className="mb-6">
-                  <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-[2px] mb-2">
-                    実績
-                  </h3>
+                  <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-[2px] mb-2">実績</h3>
                   <div className="space-y-1.5">
                     {(selectedProfile.achievements as string[]).map((a, i) => (
-                      <div
-                        key={i}
-                        className="flex items-center gap-2.5 bg-gray-50 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 font-medium"
-                      >
+                      <div key={i} className="flex items-center gap-2.5 bg-gray-50 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-teal-400 flex-shrink-0" />
                         {a}
                       </div>
@@ -662,13 +436,9 @@ export function TalentGrid({ profiles, categories, currentUserId }: Props) {
               )}
 
               {/* SNS Links */}
-              {Object.entries(selectedProfile.sns_links || {}).filter(
-                ([, v]) => v && String(v).trim() !== "",
-              ).length > 0 && (
+              {Object.entries(selectedProfile.sns_links || {}).filter(([, v]) => v && String(v).trim() !== "").length > 0 && (
                 <div className="mb-6">
-                  <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-[2px] mb-2">
-                    リンク
-                  </h3>
+                  <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-[2px] mb-2">リンク</h3>
                   <div className="flex flex-wrap gap-2">
                     {Object.entries(selectedProfile.sns_links || {})
                       .filter(([, v]) => v && String(v).trim() !== "")
@@ -677,20 +447,13 @@ export function TalentGrid({ profiles, categories, currentUserId }: Props) {
                         const url = v.startsWith("http")
                           ? v
                           : key === "x"
-                            ? `https://x.com/${v.replace("@", "")}`
-                            : key === "github"
-                              ? `https://github.com/${v}`
-                              : key === "note"
-                                ? `https://note.com/${v}`
-                                : v;
-                        const label =
-                          key === "x"
-                            ? "X"
-                            : key === "note"
-                              ? "note"
-                              : key === "github"
-                                ? "GitHub"
-                                : "Web";
+                          ? `https://x.com/${v.replace("@", "")}`
+                          : key === "github"
+                          ? `https://github.com/${v}`
+                          : key === "note"
+                          ? `https://note.com/${v}`
+                          : v;
+                        const label = key === "x" ? "X" : key === "note" ? "note" : key === "github" ? "GitHub" : "Web";
                         return (
                           <a
                             key={key}
@@ -700,19 +463,9 @@ export function TalentGrid({ profiles, categories, currentUserId }: Props) {
                             onClick={(e) => e.stopPropagation()}
                             className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-xs text-gray-600 font-medium hover:border-teal-300 hover:text-teal-600 transition-all"
                           >
-                            <svg
-                              width="12"
-                              height="12"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                              <polyline points="15 3 21 3 21 9" />
-                              <line x1="10" y1="14" x2="21" y2="3" />
+                              <polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" />
                             </svg>
                             {label}
                           </a>
@@ -742,13 +495,9 @@ export function TalentGrid({ profiles, categories, currentUserId }: Props) {
                     : "bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:from-emerald-600 hover:to-teal-600 shadow-lg shadow-teal-200/50 hover:shadow-xl"
                 }`}
               >
-                {sentInterests.has(selectedProfile.id)
-                  ? "♥ 興味ありを送信しました！"
-                  : "♡ この人と仕事したい"}
+                {sentInterests.has(selectedProfile.id) ? "♥ 興味ありを送信しました！" : "♡ この人と仕事したい"}
               </button>
-              <p className="text-center text-[11px] text-gray-300 mt-2">
-                相手にあなたのプロフィールが通知されます
-              </p>
+              <p className="text-center text-[11px] text-gray-300 mt-2">相手にあなたのプロフィールが通知されます</p>
             </div>
           </div>
         </div>

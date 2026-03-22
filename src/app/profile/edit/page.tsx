@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { Header } from "@/components/Header";
 import type { Profile, Skill, SkillCategory } from "@/lib/types";
 
 export default function ProfileEditPage() {
@@ -70,22 +71,14 @@ export default function ProfileEditPage() {
       setIsAvailable(profile.is_available);
       // コンマ区切りテキストに変換
       setAchievementsText(
-        (profile.achievements as string[])
-          .filter((a: string) => a.trim() !== "")
-          .join("、"),
+        (profile.achievements as string[]).filter((a: string) => a.trim() !== "").join("、")
       );
-      setSnsLinks({
-        x: "",
-        note: "",
-        github: "",
-        website: "",
-        ...profile.sns_links,
-      });
+      setSnsLinks({ x: "", note: "", github: "", website: "", ...profile.sns_links });
       setSkillsText(
         profile.skills
           .sort((a: Skill, b: Skill) => a.display_order - b.display_order)
           .map((s: Skill) => s.skill_name)
-          .join("、"),
+          .join("、")
       );
       if (profile.photo_url) setPhotoPreview(profile.photo_url);
     } else {
@@ -119,7 +112,8 @@ export default function ProfileEditPage() {
     let photoUrl = photoPreview;
     if (photoFile) {
       const ext = photoFile.name.split(".").pop();
-      const path = `${user.id}/avatar.${ext}`;
+      const timestamp = Date.now();
+      const path = `${user.id}/avatar_${timestamp}.${ext}`;
       const { error } = await supabase.storage
         .from("avatars")
         .upload(path, photoFile, { upsert: true });
@@ -145,7 +139,7 @@ export default function ProfileEditPage() {
       photo_url: photoUrl,
       achievements,
       sns_links: Object.fromEntries(
-        Object.entries(snsLinks).filter(([, v]) => v.trim() !== ""),
+        Object.entries(snsLinks).filter(([, v]) => v.trim() !== "")
       ),
       is_available: isAvailable,
     };
@@ -224,37 +218,7 @@ export default function ProfileEditPage() {
 
   return (
     <div className="min-h-screen bg-[#FAFBFC]">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-          <a href="/" className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-md bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="white"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
-              </svg>
-            </div>
-            <span className="text-sm font-bold text-gray-900 hidden sm:block">
-              TalentBoard
-            </span>
-          </a>
-          <a
-            href="/"
-            className="text-sm text-gray-400 hover:text-gray-600 transition-colors"
-          >
-            ← メンバー一覧に戻る
-          </a>
-        </div>
-      </header>
+      <Header currentUserId="logged-in" maxWidth="max-w-2xl" />
 
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">
@@ -285,16 +249,7 @@ export default function ProfileEditPage() {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-300">
-                      <svg
-                        width="32"
-                        height="32"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                         <circle cx="12" cy="7" r="4" />
                       </svg>
@@ -302,17 +257,7 @@ export default function ProfileEditPage() {
                   )}
                   {/* Hover overlay */}
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
-                    <svg
-                      className="text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
+                    <svg className="text-white opacity-0 group-hover:opacity-100 transition-opacity" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                       <circle cx="12" cy="13" r="4" />
                     </svg>
@@ -341,9 +286,7 @@ export default function ProfileEditPage() {
 
           {/* ===== Name ===== */}
           <div>
-            <label className={labelClass}>
-              名前 <span className="text-red-400">*</span>
-            </label>
+            <label className={labelClass}>名前 <span className="text-red-400">*</span></label>
             <input
               type="text"
               value={name}
@@ -355,9 +298,7 @@ export default function ProfileEditPage() {
 
           {/* ===== Title ===== */}
           <div>
-            <label className={labelClass}>
-              肩書き <span className="text-red-400">*</span>
-            </label>
+            <label className={labelClass}>肩書き <span className="text-red-400">*</span></label>
             <input
               type="text"
               value={title}
@@ -377,9 +318,7 @@ export default function ProfileEditPage() {
               placeholder="例：デザインの力でビジネスを加速させる"
               className={inputClass}
             />
-            <p className={hintClass}>
-              一覧カードに表示されます。30文字以内がおすすめ
-            </p>
+            <p className={hintClass}>一覧カードに表示されます。30文字以内がおすすめ</p>
           </div>
 
           {/* ===== Bio ===== */}
@@ -416,9 +355,7 @@ export default function ProfileEditPage() {
               placeholder="例：Webデザイン、マーケティング、SNS運用、ライティング"
               className={inputClass}
             />
-            <p className={hintClass}>
-              読点（、）またはカンマ（,）で区切って入力してください
-            </p>
+            <p className={hintClass}>読点（、）またはカンマ（,）で区切って入力してください</p>
             {/* Preview tags */}
             {skillPreview.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mt-2.5">
@@ -444,9 +381,7 @@ export default function ProfileEditPage() {
               placeholder="例：LP制作100件+、SNSフォロワー5万人、年商1億円達成支援"
               className={inputClass}
             />
-            <p className={hintClass}>
-              読点（、）またはカンマ（,）で区切って入力してください
-            </p>
+            <p className={hintClass}>読点（、）またはカンマ（,）で区切って入力してください</p>
             {/* Preview */}
             {achievementPreview.length > 0 && (
               <div className="space-y-1.5 mt-2.5">
@@ -470,13 +405,7 @@ export default function ProfileEditPage() {
               {Object.entries(snsLinks).map(([key, val]) => (
                 <div key={key} className="flex items-center gap-2">
                   <span className="text-xs text-gray-400 w-16 text-right font-medium">
-                    {key === "x"
-                      ? "X"
-                      : key === "note"
-                        ? "note"
-                        : key === "github"
-                          ? "GitHub"
-                          : "Web"}
+                    {key === "x" ? "X" : key === "note" ? "note" : key === "github" ? "GitHub" : "Web"}
                   </span>
                   <input
                     type="text"
@@ -496,9 +425,7 @@ export default function ProfileEditPage() {
           <div className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-xl">
             <div>
               <p className="text-sm font-bold text-gray-700">案件受付中</p>
-              <p className="text-[11px] text-gray-300 mt-0.5">
-                ONにすると一覧に「受付中」バッジが表示されます
-              </p>
+              <p className="text-[11px] text-gray-300 mt-0.5">ONにすると一覧に「受付中」バッジが表示されます</p>
             </div>
             <button
               onClick={() => setIsAvailable(!isAvailable)}
@@ -527,8 +454,8 @@ export default function ProfileEditPage() {
             {saving
               ? "保存中..."
               : isNew
-                ? "プロフィールを作成する"
-                : "変更を保存する"}
+              ? "プロフィールを作成する"
+              : "変更を保存する"}
           </button>
 
           {!isNew && (

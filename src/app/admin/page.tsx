@@ -3,11 +3,13 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { Header } from "@/components/Header";
 
 // 管理者のメールアドレスをここに設定
-const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || "")
-  .split(",")
-  .filter(Boolean);
+const ADMIN_EMAILS = [
+  // 自分のGoogleアカウントのメールアドレスを追加してください
+  // 例: "kazu@example.com"
+];
 
 interface MemberProfile {
   id: string;
@@ -168,26 +170,7 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-[#FAFBFC]">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-          <a href="/" className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-md bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
-              </svg>
-            </div>
-            <span className="text-sm font-bold text-gray-900">TalentBoard</span>
-            <span className="text-[10px] font-bold text-orange-500 bg-orange-50 px-2 py-0.5 rounded-full">
-              ADMIN
-            </span>
-          </a>
-          <a href="/" className="text-sm text-gray-400 hover:text-gray-600 transition-colors">
-            ← メンバー一覧に戻る
-          </a>
-        </div>
-      </header>
+      <Header currentUserId="logged-in" maxWidth="max-w-5xl" />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
