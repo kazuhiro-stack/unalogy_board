@@ -5,11 +5,9 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Header } from "@/components/Header";
 
-// 管理者のメールアドレスをここに設定
-const ADMIN_EMAILS = [
-  // 自分のGoogleアカウントのメールアドレスを追加してください
-  // 例: "kazu@example.com"
-];
+const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || "")
+  .split(",")
+  .filter(Boolean);
 
 interface MemberProfile {
   id: string;
